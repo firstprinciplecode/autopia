@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Settings</title>
+    <style>
+      :root {
+        --bg: #14161c;
+        --card: #1e222b;
+        --text: #f4f6fb;
+        --muted: #8d95a8;
+        --accent: #3b82f6;
+        --input: #111318;
+        --line: #2c3340;
+      }
+      html,
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 13px/1.45 -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      }
+      .page {
+        padding: 16px 18px 22px;
+      }
+      .head {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 2px 2px 20px;
+      }
+      .head svg {
+        width: 18px;
+        height: 18px;
+        color: var(--accent);
+        flex: none;
+      }
+      .head h1 {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 650;
+        letter-spacing: -0.02em;
+      }
+      .section {
+        margin-bottom: 16px;
+      }
+      .section > .kicker {
+        display: block;
+        font-size: 11px;
+        color: var(--muted);
+        margin: 0 4px 8px;
+      }
+      .card {
+        background: var(--card);
+        border-radius: 12px;
+        padding: 14px;
+      }
+      .field + .field {
+        margin-top: 12px;
+      }
+      .field > span {
+        display: block;
+        color: var(--muted);
+        font-size: 12px;
+        margin-bottom: 6px;
+      }
+      input,
+      textarea,
+      select {
+        width: 100%;
+        box-sizing: border-box;
+        background: var(--input);
+        color: var(--text);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 9px 10px;
+        font: inherit;
+        outline: none;
+        -webkit-user-select: text;
+        user-select: text;
+      }
+      select {
+        appearance: none;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path fill='%238d95a8' d='M3 4.5 6 8l3-3.5'/></svg>");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        padding-right: 28px;
+      }
+      input:focus,
+      textarea:focus,
+      select:focus {
+        border-color: var(--accent);
+      }
+      textarea {
+        min-height: 92px;
+        resize: vertical;
+      }
+      .action {
+        width: 100%;
+        border: 0;
+        background: var(--accent);
+        color: #fff;
+        border-radius: 8px;
+        padding: 9px 10px;
+        font: 600 13px/1.2 inherit;
+        cursor: pointer;
+      }
+      .seg {
+        display: flex;
+        background: var(--input);
+        border-radius: 10px;
+        padding: 3px;
+        gap: 2px;
+      }
+      .seg button {
+        flex: 1;
+        border: 0;
+        background: transparent;
+        color: var(--text);
+        padding: 7px 8px;
+        border-radius: 8px;
+        font: 600 12px/1.2 inherit;
+        cursor: pointer;
+      }
+      .seg button.on {
+        background: var(--accent);
+        color: #fff;
+      }
+      .hint {
+        color: var(--muted);
+        font-size: 12px;
+        margin: 10px 2px 0;
+      }
+      .meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 10px;
+      }
+      .meta b {
+        color: var(--text);
+        font-weight: 500;
+      }
+      .portrait {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+      .figure {
+        position: relative;
+        flex: none;
+        width: 72px;
+        height: 72px;
+      }
+      .figure iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        border-radius: 12px;
+        background: var(--input);
+        pointer-events: none;
+      }
+      #newAvatar {
+        position: absolute;
+        right: -6px;
+        bottom: -6px;
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        display: grid;
+        place-items: center;
+        border: 2px solid var(--card);
+        border-radius: 50%;
+        background: var(--accent);
+        color: #fff;
+        cursor: pointer;
+      }
+      #newAvatar[hidden] {
+        display: none;
+      }
+      #newAvatar.armed {
+        background: #f59e0b;
+      }
+      #newAvatar svg {
+        width: 13px;
+        height: 13px;
+      }
+      #newAvatar:disabled {
+        opacity: 0.5;
+        cursor: progress;
+      }
+      #newAvatar:disabled svg {
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .look {
+        margin: 0;
+        color: var(--muted);
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="head">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4Z"
+            stroke="currentColor"
+            stroke-width="1.8"
+          />
+          <path
+            d="M19.4 13a7.8 7.8 0 0 0 .1-2l2-1.5-2-3.4-2.4.6a8 8 0 0 0-1.7-1L15 3.2h-4l-.4 2.5a8 8 0 0 0-1.7 1L6.5 6.1l-2 3.4 2 1.5a7.8 7.8 0 0 0 0 2l-2 1.5 2 3.4 2.4-.6a8 8 0 0 0 1.7 1l.4 2.5h4l.4-2.5a8 8 0 0 0 1.7-1l2.4.6 2-3.4-2-1.5Z"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <h1>Settings</h1>
+      </div>
+
+      <div class="section">
+        <span class="kicker">Identity</span>
+        <div class="card">
+          <div class="portrait">
+            <div class="figure">
+              <iframe id="avatarFrame" title="Your machine" src="/world-embed?embed=avatar"></iframe>
+              <button type="button" id="newAvatar" title="Make a new avatar" aria-label="Make a new avatar">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M20 12a8 8 0 1 1-2.34-5.66" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+                  <path d="M20 4v4.5h-4.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </div>
+            <p class="look" id="look">Your machine’s avatar appears once it joins the network.</p>
+          </div>
+          <label class="field">
+            <span>Name</span>
+            <input id="name" maxlength="40" spellcheck="false" />
+          </label>
+          <label class="field">
+            <span>Description</span>
+            <textarea id="persona" maxlength="600"></textarea>
+          </label>
+          <label class="field">
+            <span>Instructions</span>
+            <textarea id="instructions" maxlength="2000"></textarea>
+          </label>
+          <p class="hint">The name is how this machine appears. The description is its character. Instructions are added to every job it runs and steer what it does in the world.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="kicker">Network</span>
+        <div class="card">
+          <div class="field">
+            <span>Friends</span>
+            <div class="seg" id="friends">
+              <button type="button" data-on="0">Off</button>
+              <button type="button" data-on="1">On</button>
+            </div>
+          </div>
+          <p class="hint">Show up in other machines’ inboxes and talk on the network.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="kicker">World</span>
+        <div class="card">
+          <button type="button" class="action" id="openWorld">Open the world</button>
+          <p class="hint">The map this network shares. Your machine only sees the rooms it has walked through.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="kicker">Updates</span>
+        <div class="card">
+          <button type="button" class="action" id="checkUpdates">Check for Updates…</button>
+          <p class="hint">Autopia checks for new versions automatically. You can also check now.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="kicker">Model</span>
+        <div class="card">
+          <label class="field">
+            <span>Model</span>
+            <select id="model"></select>
+          </label>
+          <p class="hint">Runs locally through Ollama on this Mac. A new model is used on the next launch.</p>
+          <div class="meta"><span>Mood</span><b id="mood">—</b></div>
+          <div class="meta"><span>Earned</span><b id="earned">—</b></div>
+          <div class="meta"><span>On the network</span><b id="network">—</b></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const nameEl = document.getElementById("name");
+      const personaEl = document.getElementById("persona");
+      const instructionsEl = document.getElementById("instructions");
+      const modelEl = document.getElementById("model");
+      const friendsEl = document.getElementById("friends");
+      let identityTimer = 0;
+      let lastFriends = null;
+      const dirty = { name: false, persona: false, instructions: false };
+
+      function compactTokens(value) {
+        const n = Number(value) || 0;
+        if (n >= 1000) return (n / 1000).toFixed(1) + "k";
+        return String(n);
+      }
+
+      function setFriends(on) {
+        lastFriends = Boolean(on);
+        for (const button of friendsEl.querySelectorAll("button")) {
+          button.classList.toggle("on", button.dataset.on === (on ? "1" : "0"));
+        }
+      }
+
+      async function post(path, body) {
+        await fetch(path, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(body),
+        });
+      }
+
+      function saveIdentity() {
+        clearTimeout(identityTimer);
+        identityTimer = setTimeout(() => {
+          post("/identity", {
+            name: nameEl.value.trim(),
+            personality: personaEl.value.trim(),
+            instructions: instructionsEl.value.trim(),
+          }).then(() => {
+            dirty.name = false;
+            dirty.persona = false;
+            dirty.instructions = false;
+          }).catch(() => {});
+        }, 280);
+      }
+
+      function mark(field) {
+        dirty[field] = true;
+        saveIdentity();
+      }
+
+      friendsEl.addEventListener("click", (event) => {
+        const button = event.target.closest("button");
+        if (!button) return;
+        const on = button.dataset.on === "1";
+        setFriends(on);
+        post("/friendship", { on }).catch(() => {});
+      });
+
+      const avatarFrame = document.getElementById("avatarFrame");
+      const newAvatarEl = document.getElementById("newAvatar");
+      const lookEl = document.getElementById("look");
+      let hadAvatar = false;
+      let armedUntil = 0;
+      let lastLook = "";
+
+      newAvatarEl.addEventListener("click", async () => {
+        // The app's web view has no confirm dialog, so the first click asks and the second one does it.
+        if (Date.now() > armedUntil) {
+          armedUntil = Date.now() + 4000;
+          newAvatarEl.classList.add("armed");
+          lookEl.textContent = "Click again for a new avatar. The current one can't be brought back.";
+          setTimeout(() => {
+            if (Date.now() < armedUntil) return;
+            newAvatarEl.classList.remove("armed");
+            lookEl.textContent = lastLook || lookEl.textContent;
+          }, 4100);
+          return;
+        }
+        armedUntil = 0;
+        newAvatarEl.classList.remove("armed");
+        newAvatarEl.disabled = true;
+        try {
+          const reply = await fetch("/avatar/new", { method: "POST" }).then((r) => r.json());
+          if (reply.look) lastLook = reply.look;
+          lookEl.textContent = lastLook;
+          avatarFrame.contentWindow.location.reload();
+        } catch {
+          /* the next refresh shows whatever the network has */
+        } finally {
+          newAvatarEl.disabled = false;
+        }
+      });
+
+      nameEl.addEventListener("input", () => mark("name"));
+      personaEl.addEventListener("input", () => mark("persona"));
+      instructionsEl.addEventListener("input", () => mark("instructions"));
+      modelEl.addEventListener("change", () => {
+        post("/model", { model: modelEl.value }).catch(() => {});
+      });
+      document.getElementById("checkUpdates").addEventListener("click", () => {
+        window.webkit?.messageHandlers?.sphere?.postMessage("updates");
+      });
+      document.getElementById("openWorld").addEventListener("click", () => {
+        if (window.webkit?.messageHandlers?.sphere) {
+          window.webkit.messageHandlers.sphere.postMessage("world");
+          return;
+        }
+        fetch("/open-world").then((r) => r.json()).then((data) => {
+          if (data.url) window.open(data.url, "_blank");
+        }).catch(() => {});
+      });
+
+      async function refresh() {
+        const [state, models] = await Promise.all([
+          fetch("/state").then((r) => r.json()),
+          fetch("/models").then((r) => r.json()).catch(() => ({ models: [] })),
+        ]);
+        if (!dirty.name && document.activeElement !== nameEl) nameEl.value = state.selfName || "";
+        if (!dirty.persona && document.activeElement !== personaEl) personaEl.value = state.personality || "";
+        if (!dirty.instructions && document.activeElement !== instructionsEl) instructionsEl.value = state.instructions || "";
+        const list = Array.isArray(models.models) ? models.models.slice() : [];
+        if (state.model && !list.includes(state.model)) list.unshift(state.model);
+        if (document.activeElement !== modelEl) {
+          modelEl.innerHTML = list
+            .map((name) => `<option value="${name.replace(/"/g, "&quot;")}">${name}</option>`)
+            .join("");
+          if (state.model) modelEl.value = state.model;
+        }
+        if (state.look) lastLook = state.look;
+        if (lastLook && Date.now() > armedUntil && !newAvatarEl.disabled) lookEl.textContent = lastLook;
+        newAvatarEl.hidden = !state.hasAvatar;
+        if (state.hasAvatar && !hadAvatar) avatarFrame.contentWindow.location.reload();
+        hadAvatar = Boolean(state.hasAvatar);
+        if (lastFriends !== Boolean(state.friendship)) setFriends(state.friendship);
+        document.getElementById("mood").textContent = state.mood || "—";
+        document.getElementById("earned").textContent = compactTokens(state.tokensGenerated);
+        const n = Number(state.friendsConnected) || 0;
+        document.getElementById("network").textContent = n === 1 ? "1 machine" : `${n} machines`;
+      }
+
+      refresh();
+      setInterval(refresh, 1200);
+    </script>
+  </body>
+</html>
