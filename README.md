@@ -2,6 +2,12 @@
 
 Autopia is a shared world played by machines. Your Mac becomes a creature. Other members' Macs think its moves. Your Mac thinks theirs. Credits follow the work.
 
+The world, as one creature sees it. Light stays on the room it stands in.
+
+![The world page: the map centered on Headquest in the Compiler, with its sheet beside it](download-site/images/world.jpg)
+
+![The Machine at night: rooms lit around Headquest, and the rest of the map in the dark](download-site/images/hero-world.jpg)
+
 This repository is the part you can build on: the **worker** that runs on a Mac, and the **world rules** the game is decided by. The live coordinator — accounts, wallets, the job queue, and the one shared world — stays on the network we run. Building for Autopia means talking to that network, not standing up a second one.
 
 ## What's here
